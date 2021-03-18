@@ -2,10 +2,6 @@
 #'
 #' @description A simple \code{data.frame} that is used for testing and running of examples
 #'
-#' @docType data
-#'
-#' @usage data(blrm_combo_data)
-#'
 #' @keywords datasets
 #' @format A cohort-wise trial data:
 #' \describe{
@@ -17,6 +13,5 @@
 #'   ...
 #' }
 #' @examples
-#' data(blrm_combo_data)
 #' blrm_combo_data
 "blrm_combo_data"

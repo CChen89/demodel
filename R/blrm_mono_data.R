@@ -2,10 +2,6 @@
 #'
 #' @description A simple \code{data.frame} that is used for testing and running of examples
 #'
-#' @docType data
-#'
-#' @usage data(blrm_mono_data)
-#'
 #' @keywords datasets
 #'
 #' @format A cohort-wise trial data:
@@ -17,6 +13,5 @@
 #'   ...
 #' }
 #' @examples
-#' data(blrm_mono_data)
 #' blrm_mono_data
 "blrm_mono_data"

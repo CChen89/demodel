@@ -4,7 +4,7 @@
 #' @param date The default is the the date when one run this code
 #' @param code.name the R file name used for \code{\link{demodelFit}} function. The default is 'demodel.R'. Can be modified for version control.
 #' @param fig.height,fig.width  A integer. The height and width of figures attached in the final report. The default is 8 for both width and height. See \code{\link[ggplot2]{ggsave}} for more information.
-#' @param out.path A string. Folder location where the report is saved
+#' @param output.path A string. Folder location where the report is saved
 #' @param table.file.name A string with suffix .xlsx. The file name of final report.
 #' @param fig.file.name deprecated. Will be deleted later.
 #' @return A named list

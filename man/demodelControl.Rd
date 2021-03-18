@@ -24,11 +24,11 @@ demodelControl(
 
 \item{fig.height, fig.width}{A integer. The height and width of figures attached in the final report. The default is 8 for both width and height. See \code{\link[ggplot2]{ggsave}} for more information.}
 
+\item{output.path}{A string. Folder location where the report is saved}
+
 \item{table.file.name}{A string with suffix .xlsx. The file name of final report.}
 
 \item{fig.file.name}{deprecated. Will be deleted later.}
-
-\item{out.path}{A string. Folder location where the report is saved}
 }
 \value{
 A named list
