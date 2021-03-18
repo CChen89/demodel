@@ -17,8 +17,11 @@
 #'
 #' @import ggplot2
 #' @import data.table
+#' @importFrom dplyr '%>%'
 #' @import viridis
 #' @import openxlsx
+#' @import doParallel
+#' @import foreach
 #' @examples
 #' \dontrun{
 #' # Single-agent without covariates
@@ -147,7 +150,7 @@ demodelFit <- function(data,
 
   if(!is.null(formula))
   {
-    Check.name <- formula.check(paste(formula))
+    Check.name <- formula_check(paste(formula))
     DLT.name <- Check.name$DLT.name
     npat.name <- Check.name$npat.name
     drug.name <- Check.name$drug.name
@@ -178,16 +181,15 @@ demodelFit <- function(data,
         stop("Data type is not any of the following: xlsx, csv")
       }
     }
-
-    if(!is.null(npat.name))
-    {
-      data <- data[, lapply(.SD, function(x) as.numeric(do.call(c, strsplit(x, split = ",")))), by = Sce.name]
-    }
   } else
   {
     data <- data.table(data)
   }
 
+  if(!is.null(npat.name) & is.character(data[[DLT.name]]))
+  {
+    data <- data[, lapply(.SD, function(x) as.numeric(do.call(c, strsplit(x, split = ",")))), by = Sce.name]
+  }
   if(!(Sce.name%in%names(data))) data[[Sce.name]] <- 1
 
   # check --------------------------------------------------------------------------------------
@@ -222,20 +224,20 @@ demodelFit <- function(data,
   # register cores and conduct parallel computation ---------------------------------------------------------------------------------------
   Sce <- unique(data[[Sce.name]])
   registerDoParallel(control$core)
-  demodel.MS <- foreach(i = 1:length(Sce), .combine = "BLRM.parallel.combine", .packages = c("data.table", "dplyr", "rjags"), .export = c("Cohort.to.Pat", "DLT.prob", "formula.check", "Model.formula", "Prior.para", "demodel", "BLRM.model")) %dopar%
+  demodel.MS <- foreach(i = 1:length(Sce), .combine = demodel:::Parallel_combine, .packages = c("demodel","data.table", "dplyr", "rjags")) %dopar% #, .export = c("Cohort.to.Pat", "DLT.prob", "formula_check", "Model.formula", "Prior.para", "BLRM.model")) %dopar%
     {
       Sce.data <- data[get(Sce.name) == Sce[i]][, c(Sce.name):=NULL,]
 
       # res <- eval(demodel_mf, parent.frame())
 
-      res <- demodel(data = Sce.data,
-                     formula = formula,
-                     method = method,
-                     mbdInfo = mbdInfo,
-                     madInfo = NULL,
-                     pkpdInfo = NULL,
-                     predict = predict,
-                     bayesInfo = bayesInfo)
+      res <- demodel:::demodel(data = Sce.data,
+                               formula = formula,
+                               method = method,
+                               mbdInfo = mbdInfo,
+                               madInfo = NULL,
+                               pkpdInfo = NULL,
+                               predict = predict,
+                               bayesInfo = bayesInfo)
 
       para.Sce.summary <- data.table(Scenario = Sce[i],
                                      res$para.summary)
@@ -261,24 +263,24 @@ demodelFit <- function(data,
                         para.Sce.summary = demodel.MS$para.Sce.summary,
                         NDR.Sce.summary = demodel.MS$NDR.Sce.summary)
 
-  trans.plot.data <- trans.plot(trans.results = trans.results, formula = formula, dose.levels = mbdInfo$dose.levels, ewoc = mbdInfo$ewoc, int.cut = mbdInfo$bounds, multiSce.var = Sce.name)
+  trans.plot.data <- demodel:::trans.plot(trans.results = trans.results, formula = formula, dose.levels = mbdInfo$dose.levels, ewoc = mbdInfo$ewoc, int.cut = mbdInfo$bounds, multiSce.var = Sce.name)
 
-  res.summary <- table.summary(trans.results = trans.results, data = data, formula = formula, trialInfo = mbdInfo, bayesInfo = bayesInfo, ewoc = mbdInfo$ewoc, int.cut = mbdInfo$bounds, multiSce.var = Sce.name)
+  res.summary <- demodel:::table.summary(trans.results = trans.results, data = data, formula = formula, trialInfo = mbdInfo, bayesInfo = bayesInfo, ewoc = mbdInfo$ewoc, int.cut = mbdInfo$bounds, multiSce.var = Sce.name)
 
-  plot.summary <- plot.summary(trans.plot.data = trans.plot.data, formula = formula, predict = predict, ewoc = mbdInfo$ewoc, int.cut = mbdInfo$bounds, dose.unit = mbdInfo$drug.unit, multiSce.var = Sce.name)
+  plot.summary <- demodel:::plot.summary(trans.plot.data = trans.plot.data, formula = formula, predict = predict, ewoc = mbdInfo$ewoc, int.cut = mbdInfo$bounds, dose.unit = mbdInfo$drug.unit, multiSce.var = Sce.name)
 
   if(!is.null(control$table.path))
   {
     file.prefix <- "tempFigFile"
-    output.excel <- table.summary.output(res.summary = res.summary,
-                                         formula = formula,
-                                         data = data,
-                                         multiSce.var = Sce.name,
-                                         figs = plot.summary,
-                                         file.prefix = file.prefix,
-                                         code.file.name = control$code.name,
-                                         width = control$fig.width,
-                                         height = control$fig.height)
+    output.excel <- demodel:::table.summary.output(res.summary = res.summary,
+                                                   formula = formula,
+                                                   data = data,
+                                                   multiSce.var = Sce.name,
+                                                   figs = plot.summary,
+                                                   file.prefix = file.prefix,
+                                                   code.file.name = control$code.name,
+                                                   width = control$fig.width,
+                                                   height = control$fig.height)
 
     file.name <- if(is.null(control$table.path)) paste(control$date, MBInfo$trial.name, "output.xlsx", sep = "_") else control$table.path
 
@@ -293,7 +295,8 @@ demodelFit <- function(data,
 }
 
 # combine results when using parallel computing
-BLRM.parallel.combine <- function(list1, list2)
+
+Parallel_combine <- function(list1, list2)
 {
   pDLT.Sce.summary <- rbind(list1$pDLT.Sce.summary, list2$pDLT.Sce.summary)
   Interval.Sce.summary <- rbind(list1$Interval.Sce.summary, list2$Interval.Sce.summary)

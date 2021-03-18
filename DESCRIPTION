@@ -10,7 +10,9 @@ Imports:
     openxlsx (>= 4.2.3),
     rjags (>= 4.10),
     plyr (>= 1.8.6),
-    mgsub (>= 1.7.2)
+    mgsub (>= 1.7.2),
+    doParallel (>= 1.0.16),
+    foreach (>= 1.5.1)
 Author@R: c(person(given = "Chen",
                    family = "Chen",
                    role = c("aut", "cre"),
