@@ -29,7 +29,7 @@ BLRM_model <- function(formula = NULL,
   # total number of generated samples is actually (n.burnin + n.adapt + n.sample + (n.burnin + n.adapt + n.sample-n.thin) * (n.thin - 1)) * n.chains
   # e.g. n.burnin = 4000, n.adapt = 1000, n.sample = 10000, n.chains = 2 and n.thin = 1 will generate 30000 samples but drop the first 5000 for each chain
 
-  Check.name <- formula.check(paste(formula))
+  Check.name <- formula_check(paste(formula))
   DLT.name <- Check.name$DLT.name
   npat.name <- Check.name$npat.name
   drug.name <- Check.name$drug.name

@@ -26,7 +26,7 @@ demodel <- function(data,
 
  # check is there any covariates ---------------------------------------------------------
 
-  Check.name <- formula.check(paste(formula))
+  Check.name <- formula_check(paste(formula))
   DLT.name <- Check.name$DLT.name
   npat.name <- Check.name$npat.name
   drug.name <- Check.name$drug.name

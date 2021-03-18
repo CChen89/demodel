@@ -18,10 +18,13 @@
 #' @import ggplot2
 #' @import data.table
 #' @importFrom dplyr '%>%'
+#' @importFrom stats cor quantile sd
+#' @importFrom utils tail
 #' @import viridis
 #' @import openxlsx
 #' @import doParallel
 #' @import foreach
+#' @import rjags
 #' @importFrom Rdpack reprompt
 #' @references{
 #'   \insertRef{blrm2008}{demodel}
@@ -154,7 +157,7 @@ demodelFit <- function(data,
 
   if(!is.null(formula))
   {
-    Check.name <- formula.check(paste(formula))
+    Check.name <- formula_check(paste(formula))
     DLT.name <- Check.name$DLT.name
     npat.name <- Check.name$npat.name
     drug.name <- Check.name$drug.name
@@ -228,7 +231,7 @@ demodelFit <- function(data,
   # register cores and conduct parallel computation ---------------------------------------------------------------------------------------
   Sce <- unique(data[[Sce.name]])
   registerDoParallel(control$core)
-  demodel.MS <- foreach(i = 1:length(Sce), .combine = Parallel_combine, .packages = c("data.table", "dplyr", "rjags"), .export = c("demodel", "Cohort_to_Pat", "DLT_prob", "formula.check", "Model_formula", "Prior_para", "BLRM_model")) %dopar%
+  demodel.MS <- foreach(i = 1:length(Sce), .combine = Parallel_combine, .packages = c("data.table", "dplyr", "rjags"), .export = c("demodel", "Cohort_to_Pat", "DLT_prob", "formula_check", "Model_formula", "Prior_para", "BLRM_model")) %dopar%
     {
       Sce.data <- data[get(Sce.name) == Sce[i]][, c(Sce.name):=NULL,]
 
