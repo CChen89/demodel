@@ -13,13 +13,13 @@ Imports:
     mgsub (>= 1.7.2),
     doParallel (>= 1.0.16),
     foreach (>= 1.5.1)
-Author@R: c(person(given = "Chen",
-                   family = "Chen",
-                   role = c("aut", "cre"),
-                   email = "joshuachen@gwu.edu"),
-            person(given = "Zhonggai",
-                   family = "Li",
-                   role = c("aut")))
+Author: c(person(given = "Chen",
+                 family = "Chen",
+                 role = c("aut", "cre"),
+                 email = "joshuachen@gwu.edu"),
+          person(given = "Zhonggai",
+                 family = "Li",
+                 role = c("aut")))
 Maintainer: Chen Chen <joshuachen@gwu.edu>
 Description: A general package providing model-based deisgns for early phase trial
          - Single-agent
