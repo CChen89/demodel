@@ -8,6 +8,8 @@
 [![Travis build
 status](https://travis-ci.com/CChen89/demodel.svg?branch=main)](https://travis-ci.com/CChen89/demodel)
 [![R-CMD-check](https://github.com/CChen89/demodel/workflows/R-CMD-check/badge.svg)](https://github.com/CChen89/demodel/actions)
+[![CircleCI build
+status](https://circleci.com/gh/CChen89/demodel.svg?style=svg)](https://circleci.com/gh/CChen89/demodel)
 <!-- badges: end -->
 
 The goal of demodel is to provide user-friendly functionality for early
