@@ -1,0 +1,36 @@
+Package: demodel
+Type: Package
+Title: Models for early phase dose escalation trial 
+Version: 0.1.0
+Imports:
+    dplyr (>= 1.0.5),
+    ggplot2 (>= 3.3.3),
+    viridis (>= 0.5.1),
+    data.table (>= 1.14.0),
+    openxlsx (>= 4.2.3),
+    rjags (>= 4.10),
+    plyr (>= 1.8.6),
+    mgsub (>= 1.7.2)
+Author@R: c(person(given = "Chen",
+                   family = "Chen",
+                   role = c("aut", "cre"),
+                   email = "joshuachen@gwu.edu"),
+            person(given = "Zhonggai",
+                   family = "Li",
+                   role = c("aut")))
+Maintainer: Chen Chen <joshuachen@gwu.edu>
+Description: A general package providing model-based deisgns for early phase trial
+         - Single-agent
+         - Dual-agent
+         - Adaptive Bayesian logistic regression design
+Depends: R (>= 4.0.4)
+License: GLP (>=2)
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1
+Suggests: 
+    rmarkdown,
+    knitr,
+    testthat (>= 3.0.0)
+VignetteBuilder: knitr
+Config/testthat/edition: 3
