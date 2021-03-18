@@ -1,6 +1,6 @@
 # BLRM.model() is the core function. It uses MCMC methods (e.g Gibbs sampler) either runjags or rjags
 
-BLRM.model <- function(formula = NULL,
+BLRM_model <- function(formula = NULL,
                        data,
                        predict = NULL,
                        dose.levels,

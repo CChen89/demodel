@@ -121,7 +121,7 @@ demodel <- function(data,
      data.pw <- data[, paste0("log.", drug.name, ".dose.ratio") := lapply(1:n.drug, function(i) log(.SD[[i]]/ref.dose[i])), .SDcols = drug.name][, c(drug.name) := NULL,]
     } else
     {
-     data.pw <- demodel:::Cohort.to.Pat(cumu.data = data,
+     data.pw <- demodel:::Cohort_to_pat(cumu.data = data,
                                         ref.dose = ref.dose,
                                         variable.names = Check.name)
     }
@@ -157,7 +157,7 @@ demodel <- function(data,
      }
    }
 
-    res <- demodel:::BLRM.model(formula = formula,
+    res <- demodel:::BLRM_model(formula = formula,
                                 data = data.Bayes,
                                 predict = predict,
                                 dose.levels = dose.levels,

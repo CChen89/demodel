@@ -1,4 +1,4 @@
-Cohort.to.Pat <- function(cumu.data, ref.dose, variable.names)
+Cohort_to_Pat <- function(cumu.data, ref.dose, variable.names)
 {
   ###########################################################
   # cumu.data: a data.frame, cumulative cohort data

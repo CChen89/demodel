@@ -228,7 +228,7 @@ demodelFit <- function(data,
   # register cores and conduct parallel computation ---------------------------------------------------------------------------------------
   Sce <- unique(data[[Sce.name]])
   registerDoParallel(control$core)
-  demodel.MS <- foreach(i = 1:length(Sce), .combine = demodel:::Parallel_combine, .packages = c("demodel","data.table", "dplyr", "rjags")) %dopar% #, .export = c("Cohort.to.Pat", "DLT.prob", "formula_check", "Model.formula", "Prior.para", "BLRM.model")) %dopar%
+  demodel.MS <- foreach(i = 1:length(Sce), .combine = demodel:::Parallel_combine, .packages = c("demodel","data.table", "dplyr", "rjags")) %dopar% #, .export = c("Cohort.to.Pat", "DLT.prob", "formula_check", "Model.formula", "Prior.para", "BLRM_model")) %dopar%
     {
       Sce.data <- data[get(Sce.name) == Sce[i]][, c(Sce.name):=NULL,]
 
