@@ -5,3 +5,4 @@
 ^\.github$
 ^\.circleci$
 ^\.circleci/config\.yml$
+^cran-comments\.md$
