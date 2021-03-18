@@ -12,7 +12,9 @@ Imports:
     plyr (>= 1.8.6),
     mgsub (>= 1.7.2),
     doParallel (>= 1.0.16),
-    foreach (>= 1.5.1)
+    foreach (>= 1.5.1),
+    Rdpack (>= 2.1.1)
+RdMacros: Rdpack
 Author: c(person(given = "Chen",
                  family = "Chen",
                  role = c("aut", "cre"),

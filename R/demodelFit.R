@@ -22,6 +22,10 @@
 #' @import openxlsx
 #' @import doParallel
 #' @import foreach
+#' @importFrom Rdpack reprompt
+#' @references{
+#'   \insertRef{blrm2008}{demodel}
+#' }
 #' @examples
 #' \dontrun{
 #' # Single-agent without covariates

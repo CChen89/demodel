@@ -142,3 +142,8 @@ demodel.combo.MS.cov <- demodelFit(data = data.path,
 
 
 }
+\references{
+{
+  \insertRef{blrm2008}{demodel}
+}
+}
