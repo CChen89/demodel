@@ -4,13 +4,13 @@
 #'
 #' @param data A data.frame or data.table or a string. If data is a string, it should gives the path of trial data. Trial data should be either .xlsx or .csv
 #' @param formula A formula. See examples.
-#' @param method A string. Currently, onlt blrm is allowed.
+#' @param method A string. Currently, only blrm is allowed.
 #' @param mbdInfo A named list. Trial information. See example.
 #' @param madInfo Currently not available.
-#' @param pkpdInfo Currently not avaiable.
-#' @param predict a data.frame or data.table. WHen covariates are included, predict should be provided. Otherwise, every unique combinations of covariates will be considered as predictors.
+#' @param pkpdInfo Currently not available.
+#' @param predict a data.frame or data.table. When covariates are included, predict should be provided. Otherwise, every unique combinations of covariates will be considered as predictors.
 #' @param multiSce a formula. The column name of Scenario indicator.
-#' @param bayesInfo a bnamed list. See \code{\link{BayesInfo}}.
+#' @param bayesInfo a named list. See \code{\link{BayesInfo}}.
 #' @param control a named list. See \code{\link{demodelControl}}.
 #' @return This function will generate a excel report including tables and figures
 #' @export

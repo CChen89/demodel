@@ -1,7 +1,7 @@
-#' demodel: A package for computating the notorious bar statistic
+#' demodel: A package for early phase dose finding trial
 #'
-#' The demodel package provides two categories of important functions:
-#' demodelFit and demodelControl.
+#' The demodel package provides four categories of important functions:
+#' demodelFit, MBInfo, BayesInfo and demodelControl.
 #'
 #' @section demodel functions:
 #' The demodel functions ...

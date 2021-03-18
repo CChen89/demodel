@@ -8,7 +8,7 @@
 A cohort-wise trial data:
 \describe{
   \item{Scenario}{Hypothetical scenarios}
-  \item{DSPX}{doses tested for every cohort, separatded by comma}
+  \item{DSPX}{doses tested for every cohort, separated by comma}
   \item{npat}{the number of patients treated for every cohort, separated by comma}
   \item{nDLT}{the number of DLTs observed for every cohort, separated by comma}
   ...

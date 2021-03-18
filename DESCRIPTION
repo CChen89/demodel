@@ -23,7 +23,7 @@ Author: c(person(given = "Chen",
                  family = "Li",
                  role = c("aut")))
 Maintainer: Chen Chen <joshuachen@gwu.edu>
-Description: A general package providing model-based deisgns for early phase trial
+Description: A general package providing model-based designs for early phase trial
          - Single-agent
          - Dual-agent
          - Adaptive Bayesian logistic regression design

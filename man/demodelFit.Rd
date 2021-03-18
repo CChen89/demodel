@@ -22,19 +22,19 @@ demodelFit(
 
 \item{formula}{A formula. See examples.}
 
-\item{method}{A string. Currently, onlt blrm is allowed.}
+\item{method}{A string. Currently, only blrm is allowed.}
 
 \item{mbdInfo}{A named list. Trial information. See example.}
 
 \item{madInfo}{Currently not available.}
 
-\item{pkpdInfo}{Currently not avaiable.}
+\item{pkpdInfo}{Currently not available.}
 
-\item{predict}{a data.frame or data.table. WHen covariates are included, predict should be provided. Otherwise, every unique combinations of covariates will be considered as predictors.}
+\item{predict}{a data.frame or data.table. When covariates are included, predict should be provided. Otherwise, every unique combinations of covariates will be considered as predictors.}
 
 \item{multiSce}{a formula. The column name of Scenario indicator.}
 
-\item{bayesInfo}{a bnamed list. See \code{\link{BayesInfo}}.}
+\item{bayesInfo}{a named list. See \code{\link{BayesInfo}}.}
 
 \item{control}{a named list. See \code{\link{demodelControl}}.}
 }
