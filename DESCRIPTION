@@ -15,13 +15,13 @@ Imports:
     foreach (>= 1.5.1),
     Rdpack (>= 2.1.1)
 RdMacros: Rdpack
-Author: c(person(given = "Chen",
-                 family = "Chen",
-                 role = c("aut", "cre"),
-                 email = "joshuachen@gwu.edu"),
-          person(given = "Zhonggai",
-                 family = "Li",
-                 role = c("aut")))
+Authors@R: c(person(given = "Chen",
+                    family = "Chen",
+                    role = c("aut", "cre"),
+                    email = "joshuachen@gwu.edu"),
+             person(given = "Zhonggai",
+                    family = "Li",
+                    role = c("aut")))
 Maintainer: Chen Chen <joshuachen@gwu.edu>
 Description: A general package providing model-based designs for early phase trial:
          - Single-agent;
@@ -32,6 +32,7 @@ License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
+Author: Chen Chen [aut, cre]
 Suggests: 
     rmarkdown,
     knitr,
