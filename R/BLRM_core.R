@@ -13,8 +13,7 @@ BLRM.model <- function(formula = NULL,
                        n.thin = 1,
                        n.burnin = 2000,
                        init.list = init.list,
-                       package = "rjags",
-                       ...)
+                       package = "rjags")
 {
   ############################################################################
   ############# BLRM for single/Dual agent: model specification ##############
@@ -45,25 +44,6 @@ BLRM.model <- function(formula = NULL,
   inter.paras <- if(length(dose.levels) < 2) NULL else "eta" # can be used for Mono and Combo but need to be edited if k > 3 drugs were applied
 
   model.formula <- Model.formula(Combo = (length(dose.levels) == 2), covariates = covariates)
-
-  if(package == "run.jags")
-  {
-    # Solution 1: runjags package: Advantage (automatically generates results in one function call, flexible, convenient, powerful, built-in parallel computing) ------------------------------------------------------------------------------------
-    #                              Disadvantange (do not have a sampler function, still in developing) 05/04/2020
-    BLRM.JAGS <- run.jags(model = model.formula,
-                          data = data,
-                          monitor = c(alpha.paras, beta.paras, coef.paras, inter.paras),
-                          #mutate = DLT.prob, # used to directly monitor and calculate DLT rate
-                          adapt = n.adapt,
-                          burnin = n.burnin,
-                          sample = ceiling(n.sample/n.chains),
-                          n.chains = n.chains,
-                          thin = n.thin,
-                          inits = init.list,
-                          ...)
-
-    BLRM.mcmc <- data.frame(do.call(rbind, BLRM.JAGS$mcmc), row.names = NULL)
-  }
 
   if(package == "rjags")
   {
