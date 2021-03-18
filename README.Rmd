@@ -76,8 +76,8 @@ names(demodel_mono$res.summary)
 
 and a summary using figures
 
-```{r figures, fig.width=20, fig.width==18}
-demodel_mono$plot.summary
+```{r figures, fig.width=20, fig.width=18}
+names(demodel_mono$plot.summary)
 ```
 
 To be continue

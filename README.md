@@ -73,15 +73,8 @@ names(demodel_mono$res.summary)
 and a summary using figures
 
 ``` r
-demodel_mono$plot.summary
-#> $p.Interval
+names(demodel_mono$plot.summary)
+#> [1] "p.Interval" "p.pDLT"
 ```
-
-<img src="man/figures/README-figures-1.png" width="100%" />
-
-    #> 
-    #> $p.pDLT
-
-<img src="man/figures/README-figures-2.png" width="100%" />
 
 To be continue
