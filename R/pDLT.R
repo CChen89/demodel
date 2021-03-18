@@ -1,4 +1,4 @@
-DLT.prob <- function(para, drug.name, dose.levels, ref.dose, covariates = NULL, predict = NULL)
+DLT_prob <- function(para, drug.name, dose.levels, ref.dose, covariates = NULL, predict = NULL)
 {
   #########################################
   ####### Estimate DLT Probability ########

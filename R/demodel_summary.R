@@ -13,7 +13,7 @@ trans.plot <- function(trans.results, formula, dose.levels, ewoc, int.cut, multi
  Interval.prop <- copy(trans.results$Interval.Sce.summary)
 
  # check is there any covariates ---------------------------------------------------------
- Check.name <- formula_check(paste(formula))
+ Check.name <- formula.check(paste(formula))
  DLT.name <- Check.name$DLT.name
  npat.name <- Check.name$npat.name
  drug.name <- Check.name$drug.name
@@ -59,7 +59,7 @@ plot.summary <- function(trans.plot.data, formula, predict, ewoc, int.cut, dose.
  # check if mono or combo
  # Note: if 3 or more drugs are used, this code shoulded be edited
  # check is there any covariates ---------------------------------------------------------
- Check.name <- formula_check(paste(formula))
+ Check.name <- formula.check(paste(formula))
  DLT.name <- Check.name$DLT.name
  npat.name <- Check.name$npat.name
  drug.name <- Check.name$drug.name
@@ -433,7 +433,7 @@ table.summary <- function(trans.results, formula, data, trialInfo, bayesInfo, ew
  Scenario.cumu.data <- copy(data.table(data))
 
   # check is there any covariates ---------------------------------------------------------
- Check.name <- formula_check(paste(formula))
+ Check.name <- formula.check(paste(formula))
  DLT.name <- Check.name$DLT.name
  npat.name <- Check.name$npat.name
  drug.name <- Check.name$drug.name
@@ -532,7 +532,7 @@ table.summary.output<-function(res.summary, formula = formula, data, multiSce.va
  Scenario.output.summary <- copy(res.summary$Scenario.output.summary)
 
  # Check is there any covariates --------------------------------------------------------------
- Check.name <- formula_check(paste(formula))
+ Check.name <- formula.check(paste(formula))
  DLT.name <- Check.name$DLT.name
  npat.name <- Check.name$npat.name
  drug.name <- Check.name$drug.name

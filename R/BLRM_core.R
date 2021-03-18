@@ -29,7 +29,7 @@ BLRM_model <- function(formula = NULL,
   # total number of generated samples is actually (n.burnin + n.adapt + n.sample + (n.burnin + n.adapt + n.sample-n.thin) * (n.thin - 1)) * n.chains
   # e.g. n.burnin = 4000, n.adapt = 1000, n.sample = 10000, n.chains = 2 and n.thin = 1 will generate 30000 samples but drop the first 5000 for each chain
 
-  Check.name <- formula_check(paste(formula))
+  Check.name <- formula.check(paste(formula))
   DLT.name <- Check.name$DLT.name
   npat.name <- Check.name$npat.name
   drug.name <- Check.name$drug.name
@@ -43,7 +43,7 @@ BLRM_model <- function(formula = NULL,
   coef.paras <- if(is.null(covariates)) NULL else do.call(c, lapply(paste0("gamma", 1:n.drug), paste0, 1:length(covariates)))
   inter.paras <- if(length(dose.levels) < 2) NULL else "eta" # can be used for Mono and Combo but need to be edited if k > 3 drugs were applied
 
-  model.formula <- Model.formula(Combo = (length(dose.levels) == 2), covariates = covariates)
+  model.formula <- Model_formula(Combo = (length(dose.levels) == 2), covariates = covariates)
 
   if(package == "rjags")
   {
@@ -105,7 +105,7 @@ BLRM_model <- function(formula = NULL,
   Xgrid <- if(is.null(predict)) dose.grid else merge(dose.grid, predict)
   Xgrid %>% data.table() %>% setcolorder(c(drug.name, covariates))
 
-  posterior.pDLT <- DLT.prob(para = BLRM.mcmc, drug.name = drug.name, dose.levels = dose.levels, ref.dose = ref.dose, covariates = covariates, predict = predict)
+  posterior.pDLT <- DLT_prob(para = BLRM.mcmc, drug.name = drug.name, dose.levels = dose.levels, ref.dose = ref.dose, covariates = covariates, predict = predict)
 
   # summarize the MCMC estimates of probability of DLT ---------------------------------------------------------------------------------------------------
 

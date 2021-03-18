@@ -1,6 +1,6 @@
 Package: demodel
 Type: Package
-Title: Models for early phase dose escalation trial 
+Title: Models for Early Phase Dose Rscalation Trial 
 Version: 0.1.0
 Imports:
     dplyr (>= 1.0.5),
@@ -15,7 +15,7 @@ Imports:
     foreach (>= 1.5.1),
     Rdpack (>= 2.1.1)
 RdMacros: Rdpack
-Author: c(person(given = "Chen",
+Author@R: c(person(given = "Chen",
                  family = "Chen",
                  role = c("aut", "cre"),
                  email = "joshuachen@gwu.edu"),
@@ -27,7 +27,7 @@ Description: A general package providing model-based designs for early phase tri
          - Single-agent
          - Dual-agent
          - Adaptive Bayesian logistic regression design
-Depends: R (>= 4.0.4), stats
+Depends: R (>= 4.0.0), stats
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true

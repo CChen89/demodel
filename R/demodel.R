@@ -26,7 +26,7 @@ demodel <- function(data,
 
  # check is there any covariates ---------------------------------------------------------
 
-  Check.name <- formula_check(paste(formula))
+  Check.name <- formula.check(paste(formula))
   DLT.name <- Check.name$DLT.name
   npat.name <- Check.name$npat.name
   drug.name <- Check.name$drug.name
@@ -83,7 +83,7 @@ demodel <- function(data,
    n.drug <- length(dose.levels)
 
    # extract MCMC parameters
-   Prior <- demodel:::Prior.para(mu = bayesInfo$prior$mean,
+   Prior <- Prior_para(mu = bayesInfo$prior$mean,
                                 std = bayesInfo$prior$std,
                                 corr = bayesInfo$prior$corr)
 
@@ -121,9 +121,9 @@ demodel <- function(data,
      data.pw <- data[, paste0("log.", drug.name, ".dose.ratio") := lapply(1:n.drug, function(i) log(.SD[[i]]/ref.dose[i])), .SDcols = drug.name][, c(drug.name) := NULL,]
     } else
     {
-     data.pw <- demodel:::Cohort_to_pat(cumu.data = data,
-                                        ref.dose = ref.dose,
-                                        variable.names = Check.name)
+     data.pw <- Cohort_to_Pat(cumu.data = data,
+                              ref.dose = ref.dose,
+                              variable.names = Check.name)
     }
 
     if(n.drug <= 1)
@@ -157,7 +157,7 @@ demodel <- function(data,
      }
    }
 
-    res <- demodel:::BLRM_model(formula = formula,
+    res <- BLRM_model(formula = formula,
                                 data = data.Bayes,
                                 predict = predict,
                                 dose.levels = dose.levels,

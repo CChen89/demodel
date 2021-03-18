@@ -16,6 +16,8 @@ BayesInfo(
 )
 }
 \arguments{
+\item{MCMCpackage}{A string indicating which packages will be used. Currently, tested for rjags.}
+
 \item{prior}{A named list of vectors. First element, 'mean' a vector of mean values of \eqn{log\alpha} and \eqn{\beta}. See details.}
 
 \item{init.list}{A named list. See \code{\link[rjags]{jags.model}} for more information.}
@@ -29,8 +31,6 @@ BayesInfo(
 \item{n.thin}{A integer or numeric value. See \code{\link[rjags]{jags.model}} for more information.}
 
 \item{n.chain}{A integer or numeric value. See \code{\link[rjags]{jags.model}} for more information.}
-
-\item{MCMCpacakge}{A string indicating which packages will be used. Currently, tested for rjags.}
 }
 \value{
 A named list

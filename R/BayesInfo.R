@@ -1,6 +1,6 @@
 #' Input parameters about MCMC sampler
 #'
-#' @param MCMCpacakge A string indicating which packages will be used. Currently, tested for rjags.
+#' @param MCMCpackage A string indicating which packages will be used. Currently, tested for rjags.
 #' @param prior A named list of vectors. First element, 'mean' a vector of mean values of \eqn{log\alpha} and \eqn{\beta}. See details.
 #' @param init.list A named list. See \code{\link[rjags]{jags.model}} for more information.
 #' @param n.sample A integer or numeric value. The number of MCMC samples retains. See \code{\link[rjags]{jags.model}} for more information.

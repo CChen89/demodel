@@ -13,7 +13,7 @@
 #'
 #' }
 
-formula_check <- function(formula)
+formula.check <- function(formula)
 {
   variable.name <- tstrsplit(gsub(" ", "", mgsub::mgsub(formula[2], c("cbind","\\(", "\\)"), rep("", 3))), split = ",")
   DLT.name <- variable.name[[1]]

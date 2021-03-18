@@ -1,4 +1,4 @@
-Prior.para <- function(mu, std, corr)
+Prior_para <- function(mu, std, corr)
 {
   #############################################################
   # mu: a list of length >= 1, means of log alphas and log betas, and other raw coefs

@@ -1,5 +1,5 @@
 # BLRM model for Dual Agent ---------------------------------------------------------
-Model.formula <- function(Combo = FALSE, covariates = NULL)
+Model_formula <- function(Combo = FALSE, covariates = NULL)
 {
   if(!is.null(covariates))
   {

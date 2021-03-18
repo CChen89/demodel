@@ -154,7 +154,7 @@ demodelFit <- function(data,
 
   if(!is.null(formula))
   {
-    Check.name <- formula_check(paste(formula))
+    Check.name <- formula.check(paste(formula))
     DLT.name <- Check.name$DLT.name
     npat.name <- Check.name$npat.name
     drug.name <- Check.name$drug.name
@@ -228,20 +228,20 @@ demodelFit <- function(data,
   # register cores and conduct parallel computation ---------------------------------------------------------------------------------------
   Sce <- unique(data[[Sce.name]])
   registerDoParallel(control$core)
-  demodel.MS <- foreach(i = 1:length(Sce), .combine = demodel:::Parallel_combine, .packages = c("demodel","data.table", "dplyr", "rjags")) %dopar% #, .export = c("Cohort.to.Pat", "DLT.prob", "formula_check", "Model.formula", "Prior.para", "BLRM_model")) %dopar%
+  demodel.MS <- foreach(i = 1:length(Sce), .combine = Parallel_combine, .packages = c("data.table", "dplyr", "rjags"), .export = c("demodel", "Cohort_to_Pat", "DLT_prob", "formula.check", "Model_formula", "Prior_para", "BLRM_model")) %dopar%
     {
       Sce.data <- data[get(Sce.name) == Sce[i]][, c(Sce.name):=NULL,]
 
       # res <- eval(demodel_mf, parent.frame())
 
-      res <- demodel:::demodel(data = Sce.data,
-                               formula = formula,
-                               method = method,
-                               mbdInfo = mbdInfo,
-                               madInfo = NULL,
-                               pkpdInfo = NULL,
-                               predict = predict,
-                               bayesInfo = bayesInfo)
+      res <- demodel(data = Sce.data,
+                     formula = formula,
+                     method = method,
+                     mbdInfo = mbdInfo,
+                     madInfo = NULL,
+                     pkpdInfo = NULL,
+                     predict = predict,
+                     bayesInfo = bayesInfo)
 
       para.Sce.summary <- data.table(Scenario = Sce[i],
                                      res$para.summary)
@@ -267,16 +267,16 @@ demodelFit <- function(data,
                         para.Sce.summary = demodel.MS$para.Sce.summary,
                         NDR.Sce.summary = demodel.MS$NDR.Sce.summary)
 
-  trans.plot.data <- demodel:::trans.plot(trans.results = trans.results, formula = formula, dose.levels = mbdInfo$dose.levels, ewoc = mbdInfo$ewoc, int.cut = mbdInfo$bounds, multiSce.var = Sce.name)
+  trans.plot.data <- trans.plot(trans.results = trans.results, formula = formula, dose.levels = mbdInfo$dose.levels, ewoc = mbdInfo$ewoc, int.cut = mbdInfo$bounds, multiSce.var = Sce.name)
 
-  res.summary <- demodel:::table.summary(trans.results = trans.results, data = data, formula = formula, trialInfo = mbdInfo, bayesInfo = bayesInfo, ewoc = mbdInfo$ewoc, int.cut = mbdInfo$bounds, multiSce.var = Sce.name)
+  res.summary <- table.summary(trans.results = trans.results, data = data, formula = formula, trialInfo = mbdInfo, bayesInfo = bayesInfo, ewoc = mbdInfo$ewoc, int.cut = mbdInfo$bounds, multiSce.var = Sce.name)
 
-  plot.summary <- demodel:::plot.summary(trans.plot.data = trans.plot.data, formula = formula, predict = predict, ewoc = mbdInfo$ewoc, int.cut = mbdInfo$bounds, dose.unit = mbdInfo$drug.unit, multiSce.var = Sce.name)
+  plot.summary <- plot.summary(trans.plot.data = trans.plot.data, formula = formula, predict = predict, ewoc = mbdInfo$ewoc, int.cut = mbdInfo$bounds, dose.unit = mbdInfo$drug.unit, multiSce.var = Sce.name)
 
   if(!is.null(control$table.path))
   {
     file.prefix <- "tempFigFile"
-    output.excel <- demodel:::table.summary.output(res.summary = res.summary,
+    output.excel <- table.summary.output(res.summary = res.summary,
                                                    formula = formula,
                                                    data = data,
                                                    multiSce.var = Sce.name,
