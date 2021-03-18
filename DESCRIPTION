@@ -28,7 +28,7 @@ Description: A general package providing model-based designs for early phase tri
          - Dual-agent
          - Adaptive Bayesian logistic regression design
 Depends: R (>= 4.0.4), stats
-License: GLP-2
+License: GLP (>= 2)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
