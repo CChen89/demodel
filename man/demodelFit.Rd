@@ -48,53 +48,53 @@ This function will generate a excel report including tables and figures
 \dontrun{
 # Single-agent without covariates
 
-  # Create multiple scenario data
-  npat.ms <- c(3, 4, 3, 3, 4, 4)
-  dose.ms <- c(80, 120, 160, 160, 160, 200)
-  nDLT.ms <- c(0, 0, 0, 1, 0, 1)
-  Scenario <- c(1, 2, 3, 3, 4, 4)
-  data <- data.frame(npat = npat.ms, DSPX = dose.ms, nDLT = nDLT.ms, Scenario = Scenario)
+# Create multiple scenario data
+npat.ms <- c(3, 4, 3, 3, 4, 4)
+dose.ms <- c(80, 120, 160, 160, 160, 200)
+nDLT.ms <- c(0, 0, 0, 1, 0, 1)
+Scenario <- c(1, 2, 3, 3, 4, 4)
+data <- data.frame(npat = npat.ms, DSPX = dose.ms, nDLT = nDLT.ms, Scenario = Scenario)
 
 
-  # design info ----------------------------------------------------------------------------
+# design info ----------------------------------------------------------------------------
 
-  MB.Info <- MBInfo(dose.levels = list(DSPX = c(80, 120, 160, 200, 240, 280)),
-                    ref.dose = 120,
-                    bounds = c(0.16, 0.33),
-                    ewoc = 0.25,
-                    trial.name = "DSP-509",
-                    drug.name = "DSP509",
-                    drug.unit = "mg")
+MB.Info <- MBInfo(dose.levels = list(DSPX = c(80, 120, 160, 200, 240, 280)),
+                  ref.dose = 120,
+                  bounds = c(0.16, 0.33),
+                  ewoc = 0.25,
+                  trial.name = "DSP-509",
+                  drug.name = "DSP509",
+                  drug.unit = "mg")
 
 # Bayes Info ---------------------------------------------------------------------------
 
-  Bayes.Info <- BayesInfo(MCMCpackage = "rjags",
-                          prior = list(mean = list(c(-1.7346, 0)), std = list(c(2, 1)), corr = list(0)),
-                          init.list = list(list(paras1 = c(-3, 0), .RNG.seed = 1, .RNG.name="base::Wichmann-Hill"),
-                                           list(paras1 = c(-3, 0), .RNG.seed = 2, .RNG.name="base::Wichmann-Hill")),
-                          n.sample = 10000,
-                          n.burn = 2000,
-                          n.adapt = 1000,
-                          n.chain = 2,
-                          n.thin = 1)
+Bayes.Info <- BayesInfo(MCMCpackage = "rjags",
+                        prior = list(mean = list(c(-1.7346, 0)), std = list(c(2, 1)), corr = list(0)),
+                        init.list = list(list(paras1 = c(-3, 0), .RNG.seed = 1, .RNG.name="base::Wichmann-Hill"),
+                                         list(paras1 = c(-3, 0), .RNG.seed = 2, .RNG.name="base::Wichmann-Hill")),
+                        n.sample = 10000,
+                        n.burn = 2000,
+                        n.adapt = 1000,
+                        n.chain = 2,
+                        n.thin = 1)
 
 
-    demodel.MS <- demodelFit(data = data,
-                              formula = cbind(nDLT, npat) ~ DSPX,
-                              method = "blrm",
-                              mbdInfo = MB.Info,
-                              bayesInfo = Bayes.Info,
-                              multiSce = ~ Scenario,
-                              control = demodelControl(code.name = "demodel_core.R",
-                                                       output.path = getwd(),
-                                                       table.file.name = "preview.xlsx",
-                                                       fig.file.name = NULL))
+demodel.MS <- demodelFit(data = data,
+                         formula = cbind(nDLT, npat) ~ DSPX,
+                         method = "blrm",
+                         mbdInfo = MB.Info,
+                         bayesInfo = Bayes.Info,
+                         multiSce = ~ Scenario,
+                         control = demodelControl(code.name = "demodel_core.R",
+                                                  output.path = getwd(),
+                                                  table.file.name = "preview.xlsx",
+                                                  fig.file.name = NULL))
 }
 
 # Combo with covariates
 \dontrun{
 
-  # design info ----------------------------------------------------------------------------
+# design info ----------------------------------------------------------------------------
 
 MB.Info <- MBInfo(dose.levels = list(DSPX1 = c(0.3, 0.6, 1, 1.8, 3), DSPX2 = c(200, 400, 600, 800)),
                   ref.dose = c(2.4, 400),
@@ -122,10 +122,8 @@ Bayes.Info <- BayesInfo(MCMCpackage = "rjags",
                         n.chain = 4,
                         n.thin = 1)
 
-data.path <- "~/BLRM_combo_DEM_Covariates.xlsx"
-
 # run BLRM
-demodel.combo.MS.cov <- demodelFit(data = data.path,
+demodel.combo.MS.cov <- demodelFit(data = blrm_comb_cov_data,
                                    formula = DLT ~ DSPX1 + DSPX2 | Azole + Cytarabine,
                                    method = "blrm",
                                    mbdInfo = MB.Info,

@@ -53,6 +53,7 @@ plot.summary <- function(trans.plot.data, formula, predict, ewoc, int.cut, dose.
  ########################################
 
  pDLT.summary.data <- copy(trans.plot.data$pDLT.summary.data)
+ setnames(pDLT.summary.data, old = c("2.5%", "50%", "97.5%"), new = c("LB", "Median", "UB"))
  Interval.prop.data <- copy(trans.plot.data$Interval.prop.data)
  Interval.category <- names(table(cut(c(0, sort(int.cut, decreasing = FALSE), 1), breaks = c(0, sort(int.cut, decreasing = FALSE), 1), include.lowest = TRUE, right = FALSE)))
 
@@ -67,8 +68,12 @@ plot.summary <- function(trans.plot.data, formula, predict, ewoc, int.cut, dose.
  n.drug <- length(drug.name)
  num.sce <- length(unique(Interval.prop.data[[multiSce.var]]))
 
- pDLT.ewoc.info <- Interval.prop.data[, .(EWOC.idx = any(EWOC)), by = c(multiSce.var, drug.name, covariates)]
- Interval.prop.data[, EWOC.idx := (Interval == tail(Interval.category, 1) & EWOC == TRUE), by = c(multiSce.var, drug.name, covariates)]
+ # -------------------------------------------------------------------
+ EWOC = NULL # avoid note: no visible binding for global variable 'EWOC'
+ Interval = NULL # avoid note: no visible binding for global variable 'Interval'
+
+ pDLT.ewoc.info <- Interval.prop.data[, list(EWOC.idx = any(EWOC)), by = c(multiSce.var, drug.name, covariates)]
+ Interval.prop.data[, c("EWOC.idx") := (Interval == tail(Interval.category, 1) & EWOC == TRUE), by = c(multiSce.var, drug.name, covariates)]
  pDLT.summary.data <- merge.data.table(pDLT.summary.data, pDLT.ewoc.info, by = c(multiSce.var, drug.name, covariates), sort = FALSE)
 
  # initiate the number of combinations of predictors
@@ -81,55 +86,36 @@ plot.summary <- function(trans.plot.data, formula, predict, ewoc, int.cut, dose.
   pDLT.summary.data[, paste(covariates, collapse = ":") := apply(.SD, 1, paste, collapse = ":"), .SDcols = c(covariates)]
  }
 
- # Define theme used for plots -------------------------------------------------------------------------
- mono.theme <- theme_bw() +
-         theme(panel.grid.major = element_blank(),
-               panel.grid.minor = element_blank(),
-               panel.background = element_blank(),
-               panel.spacing.x = unit(0.2, "lines"),
-               panel.spacing.y = unit(0.2, "lines"),
-               #axis.line = element_line(colour = "black"),
-               #axis.text.x = element_text(angle = 45, hjust = 1),
-               strip.background.x = element_rect(fill="wheat1"),
-               strip.background.y = element_rect(fill="wheat1"),
-               legend.position = "bottom", #c(0.9, 0.8),
-               # legend.text = element_text(size=8),
-               # legend.title = element_text(size = 8),
-               legend.background = element_rect(fill = NA, size = 1),
-               legend.key.width = unit(0.5, "lines"),
-               legend.key.height = unit(0.5, "lines"),
-               legend.spacing.y = unit(0.1, "lines"),
-               legend.box = "horizontal", # "vertical"
-               legend.box.spacing = unit(0.1, "lines"),
-               plot.title = element_text(face = "bold", vjust = -1),
-               plot.subtitle=element_text(face="italic", color="black"))
-
- combo.theme <- theme_bw() +
-   theme(panel.background = element_blank(),
-         panel.spacing.x = unit(0.2, "lines"),
-         panel.spacing.y = unit(0.2, "lines"),
-         #axis.line = element_line(colour = "black"),
-         #axis.text.x = element_text(angle = 45, hjust = 1),
-         strip.background.x = element_rect(fill="wheat1"),
-         strip.background.y = element_rect(fill="wheat1"),
-         legend.position = "bottom", #c(0.9, 0.8),
-         # legend.text = element_text(size=8),
-         # legend.title = element_text(size = 8),
-         legend.background = element_rect(fill = NA, size = 1),
-         legend.key.width = unit(0.5, "lines"),
-         legend.key.height = unit(0.5, "lines"),
-         #legend.spacing.y = unit(0.1, "lines"),
-         legend.box = "horizontal", # "vertical"
-         legend.box.spacing = unit(0.1, "lines"),
-         plot.title = element_text(face = "bold", vjust = -1),
-         plot.subtitle=element_text(face="italic", color="black"))
-
  if(n.drug == 1)
  {
+   # Define theme used for plots -------------------------------------------------------------------------
+
+   mono.theme <- theme_bw() +
+     theme(panel.grid.major = element_blank(),
+           panel.grid.minor = element_blank(),
+           panel.background = element_blank(),
+           panel.spacing.x = unit(0.2, "lines"),
+           panel.spacing.y = unit(0.2, "lines"),
+           #axis.line = element_line(colour = "black"),
+           axis.text.x = element_text(angle = 45, hjust = 1),
+           strip.background.x = element_rect(fill="wheat1"),
+           strip.background.y = element_rect(fill="wheat1"),
+           legend.position = "bottom", #c(0.9, 0.8),
+           # legend.text = element_text(size=8),
+           # legend.title = element_text(size = 8),
+           legend.background = element_rect(fill = NA, size = 1),
+           legend.key.width = unit(0.5, "lines"),
+           legend.key.height = unit(0.5, "lines"),
+           legend.spacing.y = unit(0.1, "lines"),
+           legend.box = "horizontal", # "vertical"
+           legend.box.spacing = unit(0.1, "lines"),
+           plot.title = element_text(face = "bold", vjust = -1),
+           plot.subtitle=element_text(face="italic", color="black"))
+
   # Bar/line plot for Interval Category --------------------------------------------------------------------
   if(is.null(covariates))
   {
-    p.Interval <- ggplot(data = Interval.prop.data, aes(x = get(drug.name), y = Probability, fill = EWOC.idx)) +
+    p.Interval <- ggplot(data = Interval.prop.data, aes_string(x = drug.name, y = "Probability", fill = "EWOC.idx")) +
       geom_bar(stat = "identity", colour = "black", width = 0.5, size = 0) +
       geom_hline(data = Interval.prop.data[Interval==tail(Interval.category, 1)], aes(yintercept = ewoc), colour="red", linetype = 2)
   } else
@@ -140,8 +126,8 @@ plot.summary <- function(trans.plot.data, formula, predict, ewoc, int.cut, dose.
     #   geom_linerange(aes(ymin = 0, ymax = Probability),
     #                  position = position_dodge2(width = 0.8)) +
     #   geom_hline(data = Interval.prop.data[Interval==tail(Interval.category, 1)], aes(yintercept = ewoc), colour="red", linetype = 2)
-    p.Interval <- ggplot(Interval.prop.data, aes(x = get(drug.name), y = get(paste(covariates, collapse = ":")), size = Probability)) +
-      geom_point(aes(fill = EWOC.idx), color = "black", shape = 21)
+    p.Interval <- ggplot(Interval.prop.data, aes_string(x = "drug.name", y = paste(covariates, collapse = ":"), size = "Probability")) +
+      geom_point(aes_string(fill = "EWOC.idx"), color = "black", shape = 21)
   }
 
   if(num.sce >1)
@@ -203,20 +189,20 @@ plot.summary <- function(trans.plot.data, formula, predict, ewoc, int.cut, dose.
   }
 
   # line plot for posterior summary of probability of DLT by dose levels -------------------------------------------
-  p.pDLT <- ggplot(pDLT.summary.data, aes(x = get(drug.name), fill = EWOC.idx))
+  p.pDLT <- ggplot(pDLT.summary.data, aes_string(x = drug.name, fill = "EWOC.idx"))
 
   if(!is.null(covariates))
   {
    p.pDLT <- p.pDLT +
-     geom_linerange(aes(ymin = `2.5%`, ymax = `97.5%`, color = get(paste(covariates, collapse = ":"))),
+     geom_linerange(aes_string(ymin = "LB", ymax = "UB", color = paste(covariates, collapse = ":")),
                     position = position_dodge2(width = 0.9),
                     size = 1) +
-     geom_point(aes(y = Mean, shape = "Mean"),
+     geom_point(aes(y = get("Mean"), shape = "Mean"),
                 position = position_dodge2(width = 0.9),
                 #shape = 23,
                 size = 3,
                 colour = "black") +
-     geom_point(aes(y = `50%`, shape = "Median"),
+     geom_point(aes(y = get("Median"), shape = "Median"),
                 position = position_dodge2(width = 0.9),
                 #shape = 21,
                 size = 3,
@@ -224,16 +210,17 @@ plot.summary <- function(trans.plot.data, formula, predict, ewoc, int.cut, dose.
   } else
   {
    p.pDLT <- p.pDLT +
-     geom_linerange(aes(ymin = `2.5%`, ymax = `97.5%`),
-                      size = 1) +
-     geom_point(aes(y = Mean, shape = "Mean"),
+     geom_linerange(aes_string(ymin = "LB", ymax = "UB"),
+                    size = 1) +
+     geom_point(aes(y = get("Mean"), shape = "Mean"),
+                # shape = "Mean",
                 # fill = "white",
-                #shape = 23,
+                # shape = 23,
                 size = 3,
                 colour = "black") +
-     geom_point(aes(y = `50%`, shape = "Median"),
+     geom_point(aes(y = get("Median"), shape = "Median"),
                 # fill= "white",
-                #shape = 21,
+                # shape = 21,
                 size = 3,
                 colour = "black")
   }
@@ -254,8 +241,8 @@ plot.summary <- function(trans.plot.data, formula, predict, ewoc, int.cut, dose.
     ylab("Probability") +
     labs(title = paste("Posterior distribution of DLT probability"),
          subtitle = "Percentile: 2.5% - 97.5%") +
-    scale_y_continuous(breaks = c(0, int.cut, min(round(max(pDLT.summary.data$`97.5%`), 2) + 0.02, 1)),
-                       limits = c(0, min(round(max(pDLT.summary.data$`97.5%`), 2) + 0.02, 1)),
+    scale_y_continuous(breaks = c(0, int.cut, min(round(max(pDLT.summary.data$UB), 2) + 0.02, 1)),
+                       limits = c(0, min(round(max(pDLT.summary.data$UB), 2) + 0.02, 1)),
                        expand = expansion(mult = c(0.02, 0.02))) +
     scale_shape_manual(name = "Statistic",
                        breaks = c("Mean", "Median"),
@@ -264,6 +251,7 @@ plot.summary <- function(trans.plot.data, formula, predict, ewoc, int.cut, dose.
     scale_fill_manual(name = "EWOC",
                       labels = c("below", "above"),
                       values = c('FALSE' = "#11E333", 'TRUE' = "tomato1"))
+
   if(!is.null(covariates))
   {
    p.pDLT <- p.pDLT +
@@ -279,8 +267,32 @@ plot.summary <- function(trans.plot.data, formula, predict, ewoc, int.cut, dose.
  # Combo case
  if(n.drug == 2)
  {
-  p.Interval <- ggplot(Interval.prop.data, aes(x = get(drug.name[1]), y = get(drug.name[2]), size = Probability)) +
-    geom_point(aes(fill = EWOC.idx), color = "black", shape = 21)
+
+   # Define theme used for plots -------------------------------------------------------------------------
+
+   combo.theme <- theme_bw() +
+     theme(panel.background = element_blank(),
+           panel.spacing.x = unit(0.2, "lines"),
+           panel.spacing.y = unit(0.2, "lines"),
+           #axis.line = element_line(colour = "black"),
+           axis.text.x = element_text(angle = 45, hjust = 1),
+           strip.background.x = element_rect(fill="wheat1"),
+           strip.background.y = element_rect(fill="wheat1"),
+           legend.position = "bottom", #c(0.9, 0.8),
+           # legend.text = element_text(size=8),
+           # legend.title = element_text(size = 8),
+           legend.background = element_rect(fill = NA, size = 1),
+           legend.key.width = unit(0.5, "lines"),
+           legend.key.height = unit(0.5, "lines"),
+           #legend.spacing.y = unit(0.1, "lines"),
+           legend.box = "horizontal", # "vertical"
+           legend.box.spacing = unit(0.1, "lines"),
+           plot.title = element_text(face = "bold", vjust = -1),
+           plot.subtitle=element_text(face="italic", color="black"))
+
+
+  p.Interval <- ggplot(Interval.prop.data, aes_string(x = drug.name[1], y = drug.name[2], size = "Probability")) +
+    geom_point(aes_string(fill = "EWOC.idx"), color = "black", shape = 21)
 
   if(num.sce >1)
   {
@@ -335,19 +347,19 @@ plot.summary <- function(trans.plot.data, formula, predict, ewoc, int.cut, dose.
   # line plot for posterior summary of probability of DLT by dose levels -------------------------------------------
   num.dose <- do.call(data.frame, lapply(pDLT.summary.data[, .SD, .SDcols = c(drug.name)], function(x) length(unique(x)))) # %>% sort(decreasing = TRUE)
   # num.dose.order <- do.call(c, lapply(1:n.drug, function(i) which(grepl(i, colnames(num.dose)))))
-  p.pDLT <- ggplot(pDLT.summary.data, aes(x = get(drug.name[1]))) +
-    geom_linerange(aes(ymin = `2.5%`, ymax = `97.5%`, color = get(drug.name[2])),
+  p.pDLT <- ggplot(pDLT.summary.data, aes_string(x = drug.name[1], fill = 'EWOC.idx')) +
+    geom_linerange(aes_string(ymin = 'LB', ymax = 'UB', color = drug.name[2]),
                    position = position_dodge2(width = 0.8),
                    size = 1) +
     geom_hline(yintercept = int.cut[1], linetype = 1, show.legend = TRUE) +
     geom_hline(yintercept = int.cut[2], linetype = 2, show.legend = TRUE) +
-    geom_point(aes(y = Mean, fill = EWOC.idx, shape = "Mean"),
+    geom_point(aes(y = get("Mean"), shape = "Mean"),
                position = position_dodge2(width = 0.8),
                #fill = "white",
                #shape = 23,
                size = 3,
                colour = "black") +
-    geom_point(aes(y = `50%`, fill = EWOC.idx, shape = "Median"),
+    geom_point(aes(y = get("Median"), shape = "Median"),
                position = position_dodge2(width = 0.8),
                #fill= "white",
                #shape = 21,
@@ -382,8 +394,8 @@ plot.summary <- function(trans.plot.data, formula, predict, ewoc, int.cut, dose.
     ylab("Probability") +
     labs(title = paste("Posterior distribution of DLT probability"),
          subtitle = paste0("Percentile: 2.5% - 97.5%", if(is.null(covariates)) NULL else paste0(",", " Covariates = ", paste(covariates, collapse = ":")))) +
-    scale_y_continuous(breaks = c(0, int.cut, min(round(max(pDLT.summary.data$`97.5%`), 2)+ 0.02, 1)),
-                       limits = c(0, min(round(max(pDLT.summary.data$`97.5%`), 2) + 0.02, 1)),
+    scale_y_continuous(breaks = c(0, int.cut, min(round(max(pDLT.summary.data$UB), 2)+ 0.02, 1)),
+                       limits = c(0, min(round(max(pDLT.summary.data$UB), 2) + 0.02, 1)),
                        expand = expansion(mult = c(0.02, 0.02))) +
     scale_shape_manual(name = "Statistic",
                        breaks = c("Mean", "Median"),
@@ -494,7 +506,7 @@ table.summary <- function(trans.results, formula, data, trialInfo, bayesInfo, ew
  pDLT.summary[, (Summary.stat) := round(.SD, 4), .SDcols = Summary.stat]
 
  # create summary table 4: (faster than overall for loop); (sum(Scenario.cumu.data$npat)==0) accounts for Prior only when npat = 0 --------------------------------------------------------------------------------------
- if(is.patwise | (sum(Scenario.cumu.data$npat)==0)) Scenario.cumu.data <- Scenario.cumu.data[, .(npat = if("npat"%in%colnames(Scenario.cumu.data)) 0 else .N, nDLT = sum(get(DLT.name))), by = c(Sce.key, drug.name)]
+ if(is.patwise | (sum(Scenario.cumu.data$npat)==0)) Scenario.cumu.data <- Scenario.cumu.data[, list(npat = if("npat"%in%colnames(Scenario.cumu.data)) 0 else .N, nDLT = sum(get(DLT.name))), by = c(Sce.key, drug.name)]
  Scenario.output.summary <- Scenario.cumu.data[, lapply(.SD, paste, collapse = ", "), by = Sce.key, .SDcols = c(drug.name, "npat", "nDLT")]
  Scenario.output.summary <- data.table::merge.data.table(Scenario.output.summary, NDR.summary, by = Sce.key)
 
@@ -502,7 +514,7 @@ table.summary <- function(trans.results, formula, data, trialInfo, bayesInfo, ew
  para.summary[, colnames(para.summary)[!(colnames(para.summary)%in%Sce.key)] := round(.SD, 4), .SDcols = colnames(para.summary)[!(colnames(para.summary)%in%Sce.key)]]
 
  # Interval.prop drop EWOC column ---------------------------------------------------------------------------------------------------------------------------------
- Interval.prop[, EWOC := NULL,]
+ Interval.prop[, c("EWOC") := NULL,]
 
  # reorder cols
  setcolorder(pDLT.summary, c(Sce.key, drug.name, covariates, Summary.stat))

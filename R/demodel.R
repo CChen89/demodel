@@ -54,10 +54,10 @@ demodel <- function(data,
     data <- data.table(data)
   }
 
-  if(!is.null(npat.name) & is.character(data[[DLT.name]]))
-  {
-   data <- data[, lapply(.SD, function(x) as.numeric(do.call(c, strsplit(x, split = ",")))), by = Sce.name]
-  }
+  # if(!is.null(npat.name) & is.character(data[[DLT.name]]))
+  # {
+  #  data <- data[, lapply(.SD, function(x) as.numeric(do.call(c, strsplit(x, split = ",")))), by = Sce.name]
+  # }
 
  ##############################################################################################
  ##################################### data step: end #########################################

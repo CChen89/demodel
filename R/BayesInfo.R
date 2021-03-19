@@ -14,9 +14,11 @@
 #'
 #' \dontrun{
 #'   Bayes.Info <- BayesInfo(MCMCpackage = "rjags",
-#'                           prior = list(mean = list(c(-1.7346, 0)), std = list(c(2, 1)), corr = list(0)),
+#'                           prior = list(mean = list(c(-1.7346, 0)),
+#'                                        std = list(c(2, 1)),
+#'                                        corr = list(0)),
 #'                           init.list = list(list(paras1 = c(-3, 0), .RNG.seed = 1, .RNG.name="base::Wichmann-Hill"),
-#'                           list(paras1 = c(-3, 0), .RNG.seed = 2, .RNG.name="base::Wichmann-Hill")),
+#'                                            list(paras1 = c(-3, 0), .RNG.seed = 2, .RNG.name="base::Wichmann-Hill")),
 #'                           n.sample = 10000,
 #'                           n.burn = 2000,
 #'                           n.adapt = 1000,

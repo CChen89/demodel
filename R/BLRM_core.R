@@ -109,11 +109,11 @@ BLRM_model <- function(formula = NULL,
 
   # summarize the MCMC estimates of probability of DLT ---------------------------------------------------------------------------------------------------
 
-  posterior.pDLT.summary <- data.table(posterior.pDLT)[,.(Mean = do.call(c, lapply(.SD, mean)),
-                                                          Std = do.call(c, lapply(.SD, sd)),
-                                                          '2.5%' = do.call(c, lapply(.SD, quantile, probs = 0.025)),
-                                                          '50%' = do.call(c, lapply(.SD, quantile, probs = 0.5)),
-                                                          '97.5%' = do.call(c,lapply(.SD, quantile, probs = 0.975))),]
+  posterior.pDLT.summary <- data.table(posterior.pDLT)[,list(Mean = do.call(c, lapply(.SD, mean)),
+                                                             Std = do.call(c, lapply(.SD, sd)),
+                                                             '2.5%' = do.call(c, lapply(.SD, quantile, probs = 0.025)),
+                                                             '50%' = do.call(c, lapply(.SD, quantile, probs = 0.5)),
+                                                             '97.5%' = do.call(c,lapply(.SD, quantile, probs = 0.975))),]
   posterior.pDLT.summary[, colnames(Xgrid) := Xgrid, ]
 
   # interval probability ---------------------------------------------------------------------------------------------------------------------------------
@@ -121,7 +121,7 @@ BLRM_model <- function(formula = NULL,
 
   Interval.prop <- apply(posterior.pDLT, 2, function(x) table(cut(x, breaks = c(0, int.cut, 1), include.lowest = TRUE, right = FALSE)))/nrow(posterior.pDLT)
   Interval.prop <- data.table(Xgrid, t(Interval.prop))
-  Interval.prop[, EWOC := lapply(.SD, ">=", ewoc), .SDcols = tail(Interval.category, 1)]
+  Interval.prop[, c("EWOC") := lapply(.SD, ">=", ewoc), .SDcols = tail(Interval.category, 1)]
 
   # Select the next dose with the highest probability of targeted-toxicity among safe doses --------------------------------------------------------------
   # FALSE: safe(< ewoc), TRUE: non-safe(> ewoc)
@@ -129,7 +129,7 @@ BLRM_model <- function(formula = NULL,
   # Note: if there is no NDR, NDR summary will return NA
 
   NDR.summary <- data.table::merge.data.table(posterior.pDLT.summary,
-                                              Interval.prop[EWOC == 0][, .SD[which.max(get(Interval.category[2]))], by = covariates],
+                                              Interval.prop[Interval.prop[["EWOC"]] == 0,][, .SD[which.max(get(Interval.category[2]))], by = covariates],
                                               by = colnames(Xgrid))
 
   NDR.summary[, colnames(NDR.summary) := lapply(.SD, function(x) if(is.numeric(x)) round(x, 4)), .SDcols = colnames(NDR.summary)]
