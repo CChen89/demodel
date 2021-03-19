@@ -4,6 +4,7 @@ Title: Models for Early Phase Dose Escalation Trial
 Version: 0.0.1
 Imports:
     utils,
+    stats,
     dplyr,
     ggplot2 (>= 3.3.3),
     viridis (>= 0.5.1),
@@ -28,6 +29,9 @@ Description: A general package providing model-based designs for early phase tri
          - Single-agent;
          - Dual-agent;
          - Adaptive Bayesian logistic regression design.
+URL: https://github.com/CChen89/demodel
+BugReports: https://github.com/CChen89/demodel/issues
+SystemRequirements: JAGS >= 4.3.0 (http://mcmc-jags.sourceforge.net)
 Depends: R (>= 4.0.0)
 License: GPL (>= 2)
 Encoding: UTF-8

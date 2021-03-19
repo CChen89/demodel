@@ -24,7 +24,6 @@
 #' @import openxlsx
 #' @import doParallel
 #' @import foreach
-#' @import rjags
 #' @importFrom Rdpack reprompt
 #' @references{
 #'   \insertRef{blrm2008}{demodel}

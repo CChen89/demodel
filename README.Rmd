@@ -78,8 +78,9 @@ names(demodel_mono$res.summary)
 
 and a summary using figures
 
-```{r SA_figures, fig.width=20, fig.width=18}
-names(demodel_mono$plot.summary)
+```{r SA_figures, fig.width=12, fig.width=12, echo = FALSE, split=FALSE}
+demodel_mono$plot.summary$p.Interval
+demodel_mono$plot.summary$p.pDLT
 ```
 
 ## Example 2
@@ -135,7 +136,7 @@ names(demodel.combo.MS.cov$res.summary)
 
 and a summary using figures
 
-```{r Comb_cov_figures, fig.width=20, fig.width=18, echo = FALSE, split=FALSE}
+```{r Comb_cov_figures, fig.width=12, fig.width=12, echo = FALSE, split=FALSE}
 demodel.combo.MS.cov$plot.summary$p.Interval
 demodel.combo.MS.cov$plot.summary$p.pDLT
 ```
